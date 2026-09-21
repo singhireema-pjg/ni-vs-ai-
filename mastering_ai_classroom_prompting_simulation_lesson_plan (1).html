@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mastering AI: Prompting & Human Control Workshop</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              400: '#38bdf8',
+              500: '#0284c7',
+              600: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="h-full font-sans antialiased text-slate-100 bg-slate-950 flex flex-col min-h-screen custom-scrollbar">
+
+  <!-- Header -->
+  <header class="bg-slate-900/80 border-b border-slate-800 sticky top-0 z-30 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          <i data-lucide="bot" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-indigo-300">
+            NATURAL INTELLIGENCE (NI) VS AI
+          </h1>
+          <p class="text-xs text-slate-400 font-semibold">Interactive Student Experience: Why NI Rules AI</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-2xl border border-slate-800">
+        <button onclick="switchTab('demoTab')" id="btn-demoTab" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+          <i data-lucide="terminal" class="w-3.5 h-3.5 inline mr-1"></i> Literal Robot Demo
+        </button>
+        <button onclick="switchTab('formulaTab')" id="btn-formulaTab" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-slate-200">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 inline mr-1"></i> The Prompting Formula
+        </button>
+        <button onclick="switchTab('masteryTab')" id="btn-masteryTab" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-slate-200">
+          <i data-lucide="brain-circuit" class="w-3.5 h-3.5 inline mr-1"></i> Why NI Beats AI
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- TAB 1: LITERAL ROBOT DEMO -->
+    <section id="demoTab" class="space-y-6">
+      
+      <!-- Intro Banner -->
+      <div class="glass-card p-6 rounded-3xl relative overflow-hidden border-slate-800">
+        <div class="max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-black uppercase tracking-wider mb-3 border border-cyan-500/20">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i> Interactive Experiment
+          </span>
+          <h2 class="text-2xl font-black text-white mb-2">The "Literal AI" Trap</h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            AI has incredible speed, but <strong>zero common sense</strong>. It takes human instructions 100% literally. 
+            Test the preset prompt traps below or type your own commands to see how an AI interprets vague vs. precise instructions!
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Prompt Selection & Input -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="glass-card p-5 rounded-3xl border-slate-800">
+            <h3 class="text-sm font-extrabold text-white mb-3 flex items-center gap-2">
+              <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-cyan-400"></i> Try Classroom Prompt Traps
+            </h3>
+
+            <div class="space-y-2.5">
+              <button onclick="loadTrap(0)" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 text-left transition group">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-300">
+                  <span>Trap #1: The "Your Name" Trick</span>
+                  <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full text-slate-400">Vague</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Prompt: "Write your name in the chat box."</p>
+              </button>
+
+              <button onclick="loadTrap(1)" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 text-left transition group">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-300">
+                  <span>Trap #2: The Sandwich Request</span>
+                  <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full text-slate-400">Vague</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Prompt: "Make me a sandwich."</p>
+              </button>
+
+              <button onclick="loadTrap(2)" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 text-left transition group">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-300">
+                  <span>Trap #3: Tell me about space</span>
+                  <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full text-slate-400">Vague</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Prompt: "Tell me about space."</p>
+              </button>
+
+              <button onclick="loadTrap(3)" class="w-full p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 text-left transition group">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-300">
+                  <span>Trap #4: Draw a cold drink</span>
+                  <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full text-slate-400">Ambiguous</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1">Prompt: "Draw a cold drink."</p>
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Prompt Box -->
+          <div class="glass-card p-5 rounded-3xl border-slate-800 space-y-3">
+            <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
+              <i data-lucide="edit-3" class="w-4 h-4 text-emerald-400"></i> Or Test Your Own Prompt
+            </h3>
+            <textarea id="userInputPrompt" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition resize-none" placeholder="Type a prompt here (e.g. 'Write a story', 'Explain gravity')..."></textarea>
+            
+            <button onclick="runCustomPrompt()" class="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-95 text-white font-extrabold text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
+              <i data-lucide="play" class="w-4 h-4"></i> Run Prompt Through AI Simulator
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: AI Output Simulation Output Card -->
+        <div class="lg:col-span-7">
+          <div class="glass-card p-6 rounded-3xl border-slate-800 h-full flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></div>
+                  <span class="text-xs font-black uppercase text-slate-400 tracking-wider">Robot AI Chat Output</span>
+                </div>
+                <span id="promptQualityBadge" class="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  Vague Instruction
+                </span>
+              </div>
+
+              <!-- Output Box -->
+              <div class="bg-slate-950/90 rounded-2xl border border-slate-800 p-5 min-h-[180px] font-mono text-sm space-y-3 relative overflow-hidden">
+                <div id="aiOutputText" class="text-cyan-300 font-bold leading-relaxed">
+                  "your name"
+                </div>
+              </div>
+
+              <!-- Explanation & Lesson Box -->
+              <div id="lessonBox" class="mt-4 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs leading-relaxed space-y-2">
+                <div class="font-extrabold flex items-center gap-1.5 text-amber-300 text-sm">
+                  <i data-lucide="lightbulb" class="w-4 h-4"></i> Why did the AI do this?
+                </div>
+                <p id="lessonText">
+                  You said "write your name". The AI followed the exact string of words literally instead of understanding your true intent (writing its AI name like "ChatGPT" or "Gemini"). AI has no mind to guess what you meant!
+                </p>
+              </div>
+            </div>
+
+            <!-- Fix Comparison Box -->
+            <div id="fixedPromptContainer" class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 space-y-2">
+              <div class="text-xs font-black uppercase tracking-wide text-emerald-400 flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i> The Specific Fix (Mastering AI)
+              </div>
+              <p id="fixedPromptText" class="text-xs text-slate-300 font-medium leading-relaxed">
+                "Act as a helpful robot assistant named Robo. Type your official robot name 'Robo' inside quotes in the chat box."
+              </p>
+              <div class="pt-2">
+                <button onclick="testFixedPrompt()" class="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition flex items-center gap-1.5">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Test Precise Prompt
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: THE PROMPTING FORMULA -->
+    <section id="formulaTab" class="space-y-6 hidden">
+      
+      <div class="glass-card p-6 rounded-3xl border-slate-800">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-black uppercase tracking-wider mb-2 border border-blue-500/20">
+          <i data-lucide="sliders" class="w-3.5 h-3.5"></i> The 4-Part Prompt Engineering Recipe
+        </span>
+        <h2 class="text-2xl font-black text-white mb-2">How to Give AI Clear Instructions</h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          When humans talk to humans, we rely on tone of voice, body language, and shared common sense. 
+          When humans talk to AI, we must provide <strong>all 4 building blocks</strong> to get the exact output we want.
+        </p>
+      </div>
+
+      <!-- 4 Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Card 1: Role -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-cyan-500/40 transition">
+          <div class="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-black">
+            1
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-white">ROLE (Persona)</h3>
+            <p class="text-xs text-slate-400 mt-1">Who should the AI act as?</p>
+            <div class="mt-3 p-3 rounded-2xl bg-slate-900 text-xs text-cyan-300 font-mono">
+              "Act as an expert math tutor for a 5th grader..."
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400">Gives the AI the right mindset, tone, and knowledge level.</p>
+        </div>
+
+        <!-- Card 2: Context -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-blue-500/40 transition">
+          <div class="w-10 h-10 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-black">
+            2
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-white">CONTEXT (Background)</h3>
+            <p class="text-xs text-slate-400 mt-1">What is the situation?</p>
+            <div class="mt-3 p-3 rounded-2xl bg-slate-900 text-xs text-blue-300 font-mono">
+              "...I am preparing for a science test about gravity on Mars..."
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400">Helps AI understand why you are asking and what background applies.</p>
+        </div>
+
+        <!-- Card 3: Task -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-indigo-500/40 transition">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-black">
+            3
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-white">TASK (Action)</h3>
+            <p class="text-xs text-slate-400 mt-1">What exact work should it do?</p>
+            <div class="mt-3 p-3 rounded-2xl bg-slate-900 text-xs text-indigo-300 font-mono">
+              "...Explain how jump height changes on Mars compared to Earth..."
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400">Uses strong action verbs: "List", "Summarize", "Compare", "Design".</p>
+        </div>
+
+        <!-- Card 4: Constraints -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-purple-500/40 transition">
+          <div class="w-10 h-10 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-black">
+            4
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-white">CONSTRAINTS (Rules)</h3>
+            <p class="text-xs text-slate-400 mt-1">What are the limits or format?</p>
+            <div class="mt-3 p-3 rounded-2xl bg-slate-900 text-xs text-purple-300 font-mono">
+              "...In 3 bullet points, using simple words and 1 fun analogy."
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400">Prevents overly long, off-topic, or confusing responses.</p>
+        </div>
+
+      </div>
+
+      <!-- Interactive Fix-It Challenge for Students -->
+      <div class="glass-card p-6 rounded-3xl border-slate-800 space-y-4">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i data-lucide="wrench" class="w-5 h-5 text-amber-400"></i> Classroom Exercise: Fix the Bad Prompt!
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-rose-950/40 border border-rose-500/30 space-y-2">
+            <span class="text-[10px] font-black uppercase text-rose-400 bg-rose-500/20 px-2 py-0.5 rounded-full">
+              ❌ Bad Vague Prompt
+            </span>
+            <p class="text-sm text-slate-200 font-mono font-bold">"Write a poem about space."</p>
+            <p class="text-xs text-slate-400">Result: Generates a generic, random rhyming poem that might be too long, babyish, or overly complex.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 space-y-2">
+            <span class="text-[10px] font-black uppercase text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded-full">
+              ✅ Mastered Prompt (Role + Context + Task + Constraints)
+            </span>
+            <p class="text-sm text-slate-200 font-mono font-bold">
+              "Act as a science communicator. Write a humorous 4-line poem for 10-year-olds explaining why astronauts float in microgravity. Do not use complex jargon."
+            </p>
+            <p class="text-xs text-slate-400">Result: Perfectly targeted, highly engaging, exact length required!</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 3: HUMANS VS AI MASTERY -->
+    <section id="masteryTab" class="space-y-6 hidden">
+      
+      <div class="glass-card p-6 rounded-3xl border-slate-800">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-black uppercase tracking-wider mb-2 border border-amber-500/20">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Natural Intelligence (NI) Power
+        </span>
+        <h2 class="text-2xl font-black text-white mb-2">Why Natural Intelligence (NI) is Far More Important Than AI</h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          AI has no mind, no feelings, and zero common sense. It is just code running fast calculation algorithms. 
+          <strong>Natural Intelligence (NI)—the human brain—is what gives AI purpose, rules, and direction.</strong>
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Pillar 1 -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-extrabold">
+              <i data-lucide="brain" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-extrabold text-white">1. NI Has Common Sense; AI Only Follows Patterns</h3>
+              <p class="text-xs text-slate-400">Context & Judgment</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            When you say "make me a sandwich", your NI knows you mean food. AI takes the string literally and might answer "You are now a sandwich!" AI lacks human real-world understanding.
+          </p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-extrabold">
+              <i data-lucide="check-check" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-extrabold text-white">2. NI Verifies Truth; AI Can Hallucinate</h3>
+              <p class="text-xs text-slate-400">Critical Thinking & Fact-Checking</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            AI makes up convincing-sounding fake facts (hallucinations). Only human Natural Intelligence can double-check outputs, evaluate evidence, and spot errors.
+          </p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-extrabold">
+              <i data-lucide="compass" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-extrabold text-white">3. NI Is the Driver; AI Is Just the Engine</h3>
+              <p class="text-xs text-slate-400">Vision & Purpose</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            A sports car engine is fast, but without a human driver holding the steering wheel, it goes nowhere or crashes. You provide the goals, questions, and creativity.
+          </p>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="glass-card p-5 rounded-3xl border-slate-800 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-extrabold">
+              <i data-lucide="heart" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-extrabold text-white">4. NI Possesses Empathy, Ethics & Care</h3>
+              <p class="text-xs text-slate-400">Morals & Human Connection</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            AI doesn't care about fairness, kindness, or human feelings. Human NI ensures that technology is used responsibly and ethically to help people.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- JavaScript Logic -->
+  <script>
+    const presetTraps = [
+      {
+        badge: "Vague Instruction",
+        badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
+        prompt: "Write your name in the chat box.",
+        output: '"your name"',
+        lesson: "You said 'write your name'. The AI literally typed the words 'your name' because it cannot read your mind to know if you meant its name or yours!",
+        fixed: "Act as a helpful classroom assistant named AI-Bot. Type your official robot name 'AI-Bot' in quotes."
+      },
+      {
+        badge: "Missing Context",
+        badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
+        prompt: "Make me a sandwich.",
+        output: 'Error: Cannot physically touch physical objects. Or: "You are now a sandwich!"',
+        lesson: "AI is software—it cannot make food! And grammatically, 'Make me a sandwich' can literally mean 'Turn me into a sandwich'.",
+        fixed: "Act as a chef. Provide a 3-step easy recipe for a peanut butter and jelly sandwich for a 10-year-old."
+      },
+      {
+        badge: "Overly Broad",
+        badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+        prompt: "Tell me about space.",
+        output: '"Space is big. It contains stars, planets, black holes, galaxies, asteroids, nebulae, gravity, vacuum..." [Generates 1,000 words of random facts]',
+        lesson: "Space is huge! Without constraints, the AI gives an overwhelming, random dump of facts that might be too hard or too long.",
+        fixed: "Act as an astronomer. Give me 3 cool facts about Jupiter's Great Red Spot formatted as bullet points."
+      },
+      {
+        badge: "Ambiguous Words",
+        badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
+        prompt: "Draw a cold drink.",
+        output: '[Generates an image of a soda wearing a winter coat, hat, and scarf standing in snow]',
+        lesson: "'Cold' can mean temperature or winter weather! AI took 'cold' literally and dressed the drink in a winter coat.",
+        fixed: "Generate an image of an iced lemonade glass filled with ice cubes and lemon slices sitting on a sunny beach table."
+      }
+    ];
+
+    let currentTrapIndex = 0;
+
+    function switchTab(tabId) {
+      ['demoTab', 'formulaTab', 'masteryTab'].forEach(id => {
+        const tabEl = document.getElementById(id);
+        const btnEl = document.getElementById(`btn-${id}`);
+        if (id === tabId) {
+          tabEl.classList.remove('hidden');
+          btnEl.className = "tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-cyan-500/20 text-cyan-300 border border-cyan-500/30";
+        } else {
+          tabEl.classList.add('hidden');
+          btnEl.className = "tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-slate-200";
+        }
+      });
+    }
+
+    function loadTrap(index) {
+      currentTrapIndex = index;
+      const trap = presetTraps[index];
+
+      document.getElementById('promptQualityBadge').className = `text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${trap.badgeColor}`;
+      document.getElementById('promptQualityBadge').innerText = trap.badge;
+
+      document.getElementById('aiOutputText').innerText = trap.output;
+      document.getElementById('lessonText').innerText = trap.lesson;
+      document.getElementById('fixedPromptText').innerText = `"${trap.fixed}"`;
+    }
+
+    function runCustomPrompt() {
+      const text = document.getElementById('userInputPrompt').value.trim();
+      if (!text) return;
+
+      document.getElementById('promptQualityBadge').className = "text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30";
+      document.getElementById('promptQualityBadge').innerText = "Custom Input Tested";
+
+      if (text.length < 15) {
+        document.getElementById('aiOutputText').innerText = `[Literal output for: "${text}"] -> Response is brief or random because prompt lacks context and rules.`;
+        document.getElementById('lessonText').innerText = "Short prompts often leave room for the AI to guess wrong. Try adding Role, Context, and Constraints!";
+        document.getElementById('fixedPromptText').innerText = `"Act as a teacher. Explain '${text}' in 2 simple sentences for middle school students."`;
+      } else {
+        document.getElementById('aiOutputText').innerText = `[Simulated AI Response]: "Here is your output for '${text.substring(0, 30)}...' adhering strictly to your request."`;
+        document.getElementById('lessonText').innerText = "Good job! Longer prompts with specific keywords give the AI much clearer boundaries to follow.";
+        document.getElementById('fixedPromptText').innerText = `Your prompt was already quite detailed! To make it perfect, ensure you specify output format (bullet points, word count).`;
+      }
+    }
+
+    function testFixedPrompt() {
+      const trap = presetTraps[currentTrapIndex];
+      document.getElementById('promptQualityBadge').className = "text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+      document.getElementById('promptQualityBadge').innerText = "Mastered Prompt Output";
+
+      document.getElementById('aiOutputText').innerText = `[SUCCESS]: Executing precise command: "${trap.fixed}" -> Perfect target output generated!`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadTrap(0);
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
